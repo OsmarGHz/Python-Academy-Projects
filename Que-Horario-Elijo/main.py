@@ -17,15 +17,40 @@ def main():
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file("credentials.json",SCOPES)
+            creds = flow.run_local_server(port = 0)
 
-    else:
-        flow = InstalledAppFlow.from_client_secrets_file("credencials.json",SCOPES)
-        creds = flow.run_local_server(port = 0)
-
-    with open("token.json", "w") as token:
-        token.write(creds.to_json())
+        with open("token.json", "w") as token:
+            token.write(creds.to_json())
 
     try:
         service = build("calendar","v3",credentials=creds)
+
+        event = {
+            "summary": "My Python Event",
+            "location": "Somewhere Online",
+            "description": "Some more details on this awesome event",
+            "colorId": 6,
+            "start": {
+                "dateTime": "2024-12-15T00:00:00+"
+            }
+        }
+
+        # now = dt.datetime.now().isoformat() + "Z"
+
+        # event_result = service.events().list(calendarId="primary", timeMin=now, maxResults=10, singleEvents=True, orderBy="startTime").execute()
+        # events = event_result.get("items", [])
+        # if not events:
+        #     print("No upcoming events found")
+        #     return
+        
+        # for event in events:
+        #     start = event["start"].get("dateTime",event["start"].get("date"))
+        #     print(start, event["summary"])
+
     except HttpError as error:
         print("An error ocurred", error)
+
+if __name__  == "__main__":
+    main()
