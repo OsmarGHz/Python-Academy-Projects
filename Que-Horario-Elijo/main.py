@@ -9,48 +9,48 @@ from googleapiclient.errors import HttpError
 
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 
+def introPrograma():
+    print("""
+    ¡Bienvenido a ¿Qué horario elijo?!
+    En este programa, tú agregas tus opciones de clases por separado para este semestre, y nosotros haremos la magia!
+    Con nuestros calendarios que puedes agregar a Google Calendar, te ahorrarás tiempo!
+    """)
+
+def mostrarAyuda(): #Mostrar aiuda
+    print("""
+    Permítenos darte nuestro menú de opciones:
+        conectar \t Conecta esta app con tu cuenta de Google
+        desconectar \t Desconecta tu cuenta de Google, de esta app
+        help \t\t Muestra esta "aiuda"
+        clases \t\t Guarda o elimina tus clases
+        calendarios \t Administra tus calendarios, y genera nuevos en base a tus clases (dentro, podrás pushear tu calendario a Calendar)
+    """)
+
+def mostrarDespedida():
+    print("""
+    Nos vemos pronto!
+    """)
+
+def esSalir(palabra):
+    if palabra.lower() == "salir":
+        return True
+    else: return False
+
+def esIgualString(palabra1, palabra2):
+    if(palabra1==palabra2):
+        return True
+    else: return False
+
+def menuCiclado():
+    entrada = ""
+    while not esSalir(entrada):
+        entrada = input(" -> ")
+
 def main():
-    creds = None
-    if os.path.exists("token.json"):
-        creds = Credentials.from_authorized_user_file("token.json")
-
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file("credentials.json",SCOPES)
-            creds = flow.run_local_server(port = 0)
-
-        with open("token.json", "w") as token:
-            token.write(creds.to_json())
-
-    try:
-        service = build("calendar","v3",credentials=creds)
-
-        event = {
-            "summary": "My Python Event",
-            "location": "Somewhere Online",
-            "description": "Some more details on this awesome event",
-            "colorId": 6,
-            "start": {
-                "dateTime": "2024-12-15T00:00:00+"
-            }
-        }
-
-        # now = dt.datetime.now().isoformat() + "Z"
-
-        # event_result = service.events().list(calendarId="primary", timeMin=now, maxResults=10, singleEvents=True, orderBy="startTime").execute()
-        # events = event_result.get("items", [])
-        # if not events:
-        #     print("No upcoming events found")
-        #     return
-        
-        # for event in events:
-        #     start = event["start"].get("dateTime",event["start"].get("date"))
-        #     print(start, event["summary"])
-
-    except HttpError as error:
-        print("An error ocurred", error)
+    introPrograma()
+    mostrarAyuda()
+    menuCiclado()
+    mostrarDespedida()
 
 if __name__  == "__main__":
     main()
