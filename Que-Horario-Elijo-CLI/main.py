@@ -1,3 +1,7 @@
+# You need to install   openpyxl
+#                       pandas
+# pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
+
 import os.path
 import os
 #pip install pandas
